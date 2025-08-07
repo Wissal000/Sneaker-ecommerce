@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+ @keyframes shine {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.button-bg {
+  background: conic-gradient(
+    from 0deg,
+    #00ff00,      /* Neon Green */
+    #004400,      /* Dark Green */
+    #00aa00,      /* Vivid Green */
+    #001100,      /* Almost Black */
+    #00ff00       /* Neon Green again to loop */
+  );
+  background-size: 300% 300%;
+  animation: shine 4s ease-in-out infinite;
+  border-radius: 9999px; /* fully rounded */
+  padding: 0.125rem;     /* outer shine padding */
+}
+
+
+/* Reset margin, padding and set box-sizing globally */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Optional: make html and body fill full height */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #000; /* or your background */
+  color: #fff; /* text color */
+  font-family: 'Outfit', sans-serif;
+}
+
+

@@ -70,125 +70,138 @@ export default function Checkout() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white py-12 px-4 sm:px-8 lg:px-16 font-outfit">
-      <div className="max-w-3xl mx-auto bg-[#111] rounded-xl shadow-lg p-6 space-y-8">
-        <h2 className="text-2xl font-semibold border-b border-gray-700 pb-2">
+    <div
+      className="min-h-screen bg-black flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 font-outfit"
+      style={{
+        backgroundImage: `radial-gradient(circle at 1px 1px, #222 1px, transparent 1px), 
+                          radial-gradient(circle at 20px 20px, #222 1px, transparent 1px)`,
+        backgroundSize: "40px 40px",
+      }}
+    >
+      <div className="max-w-4xl w-full bg-gray-900 rounded-2xl shadow-lg p-10 space-y-10 border border-green-700">
+        {/* Heading */}
+        <h2 className="text-3xl font-extrabold text-green-400 text-center">
           Checkout
         </h2>
 
-        {/* Customer Info Form */}
-        <div className="space-y-4">
-          <div>
-            <label className="block mb-1 text-sm text-gray-300">Name</label>
-            <input
-              type="text"
+        {/* Grid container */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+          {/* Customer Info Form */}
+          <form className="space-y-6">
+            <InputField
+              label="Full Name"
               name="name"
               value={customer.name}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 rounded-md bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-1 focus:ring-green-600"
-              placeholder="Your name"
+              placeholder="Your full name"
+              type="text"
             />
-          </div>
-
-          <div>
-            <label className="block mb-1 text-sm text-gray-300">Email</label>
-            <input
-              type="email"
+            <InputField
+              label="Email Address"
               name="email"
               value={customer.email}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 rounded-md bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-1 focus:ring-green-600"
               placeholder="you@example.com"
+              type="email"
             />
-          </div>
-
-          <div>
-            <label className="block mb-1 text-sm text-gray-300">Phone</label>
-            <input
-              type="text"
+            <InputField
+              label="Phone Number"
               name="phone"
               value={customer.phone}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 rounded-md bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-1 focus:ring-green-600"
-              placeholder="+212..."
+              placeholder="+212 600 000 000"
+              type="tel"
             />
-          </div>
+            <div>
+              <label className="block mb-1 text-green-400 font-semibold">
+                Address
+              </label>
+              <textarea
+                name="address"
+                value={customer.address}
+                onChange={handleInputChange}
+                rows={4}
+                placeholder="Street, City, Zip Code"
+                className="w-full rounded-md border border-green-600 bg-black px-4 py-3 text-green-300 placeholder-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+              />
+            </div>
+          </form>
 
-          <div>
-            <label className="block mb-1 text-sm text-gray-300">Address</label>
-            <textarea
-              name="address"
-              value={customer.address}
-              onChange={handleInputChange}
-              className="w-full px-4 py-2 rounded-md bg-gray-900 text-white border border-gray-700 focus:outline-none focus:ring-1 focus:ring-green-600"
-              placeholder="Street, City, Zip Code"
-              rows={3}
-            />
-          </div>
-        </div>
+          {/* Cart Summary */}
+          <div className="bg-black rounded-lg p-6 shadow-inner border border-green-700 overflow-y-auto max-h-[400px]">
+            <h3 className="text-xl font-semibold mb-6 border-b border-green-700 pb-2 text-green-400">
+              Your Cart
+            </h3>
 
-        {/* Cart Items */}
-        <div>
-          <h3 className="text-xl font-medium mb-4 border-b border-gray-700 pb-1">
-            Your Cart
-          </h3>
-
-          {cart.length === 0 ? (
-            <p className="text-gray-400 text-center">Your cart is empty.</p>
-          ) : (
-            <ul className="space-y-4">
-              {cart.map(({ product, quantity, size }) => {
-                const discountedPrice =
-                  product.discount && product.discount > 0
-                    ? (product.price * (100 - product.discount)) / 100
-                    : product.price;
-
-                return (
-                  <li
-                    key={product._id + size}
-                    className="flex justify-between items-center border-b border-gray-700 pb-3"
-                  >
-                    <div>
-                      <p className="font-medium">{product.name}</p>
-                      <p className="text-sm text-gray-400">Qty: {quantity}</p>
-                      <p className="text-sm text-gray-500 italic">
-                        Size: {size}
-                      </p>
-                    </div>
-                    <div className="text-green-400 font-medium">
-                      {(discountedPrice * quantity).toFixed(2)} dh
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
-
-        {/* Total + Button */}
-        {cart.length > 0 && (
-          <>
-            <div className="border-t border-gray-700 pt-4 text-right">
-              <p className="text-lg">
-                Total:{" "}
-                <span className="text-green-400 font-semibold">
-                  {totalPrice.toFixed(2)} dh
-                </span>
+            {cart.length === 0 ? (
+              <p className="text-green-600 text-center py-20">
+                Your cart is empty.
               </p>
-            </div>
+            ) : (
+              <ul className="divide-y divide-green-700 max-h-[350px] overflow-y-auto">
+                {cart.map(({ product, quantity, size }) => {
+                  const discountedPrice =
+                    product.discount && product.discount > 0
+                      ? (product.price * (100 - product.discount)) / 100
+                      : product.price;
 
-            <div className="text-center">
-              <button
-                onClick={handlePlaceOrder}
-                disabled={isPlacingOrder}
-                className="bg-green-600 hover:bg-green-700 text-white text-sm px-6 py-2 rounded-lg shadow-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isPlacingOrder ? "Placing Order..." : "Place Order"}
-              </button>
-            </div>
-          </>
-        )}
+                  return (
+                    <li
+                      key={product._id + size}
+                      className="flex justify-between items-center py-3"
+                    >
+                      <div>
+                        <p className="font-medium text-green-300">{product.name}</p>
+                        <p className="text-sm text-green-500">
+                          Qty: {quantity} | Size: {size}
+                        </p>
+                      </div>
+                      <div className="text-green-400 font-semibold">
+                        {(discountedPrice * quantity).toFixed(2)} dh
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
+            {/* Total */}
+            {cart.length > 0 && (
+              <div className="mt-6 border-t border-green-700 pt-4 flex justify-between text-lg font-semibold text-green-400">
+                <span>Total:</span>
+                <span>{totalPrice.toFixed(2)} dh</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Place order button */}
+        <div className="text-center">
+          <button
+            onClick={handlePlaceOrder}
+            disabled={isPlacingOrder}
+            className="inline-block bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-10 rounded-full shadow-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isPlacingOrder ? "Placing Order..." : "Place Order"}
+          </button>
+        </div>
       </div>
+    </div>
+  );
+}
+
+function InputField({ label, name, value, onChange, placeholder, type = "text" }) {
+  return (
+    <div>
+      <label className="block mb-1 text-green-400 font-semibold">{label}</label>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="w-full rounded-md border border-green-600 bg-black px-4 py-3 text-green-300 placeholder-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+      />
     </div>
   );
 }

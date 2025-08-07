@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import backgroundAdd from "../assets/backgroundAdd.png";
 
 export default function AddSneaker() {
   const [form, setForm] = useState({
@@ -86,100 +85,93 @@ export default function AddSneaker() {
   };
 
   return (
-    <div className="min-h-screen bg-black relative flex justify-center items-center p-6 overflow-hidden">
-      {/* Background layer */}
-      <div
-        className="absolute inset-0 bg-repeat bg-[length:200px_200px] bg-center opacity-20 z-0"
-        style={{ backgroundImage: `url(${backgroundAdd})` }}
-      />
-
+    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 py-12">
       <form
         onSubmit={handleSubmit}
-        className="relative z-10 bg-black/40 border border-green-500 shadow-xl p-8 rounded-xl w-full max-w-2xl space-y-6 text-white backdrop-blur-sm"
+        className="w-full max-w-3xl bg-black/40 border border-green-500 p-10 rounded-xl backdrop-blur-md shadow-2xl space-y-8"
       >
-        <h2 className="font-playfair text-3xl font-bold text-green-500 text-center">
+        <h2 className="text-center text-3xl font-bold text-green-500 font-playfair">
           Add New Sneaker
         </h2>
 
-        {[
-          "name",
-          "brand",
-          "price",
-          "discount",
-          "description",
-          "category",
-          "color",
-        ].map((field) => (
-          <input
-            key={field}
-            type={["price", "discount"].includes(field) ? "number" : "text"}
-            name={field}
-            placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-            value={form[field]}
-            onChange={handleChange}
-            required={["name", "price", "category"].includes(field)}
-            className="placeholder:italic w-full bg-black text-white border border-green-600 placeholder-gray-400 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-        ))}
+        {/* Basic Fields */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          {[
+            "name",
+            "brand",
+            "price",
+            "discount",
+            "description",
+            "category",
+            "color",
+          ].map((field) => (
+            <input
+              key={field}
+              type={["price", "discount"].includes(field) ? "number" : "text"}
+              name={field}
+              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+              value={form[field]}
+              onChange={handleChange}
+              required={["name", "price", "category"].includes(field)}
+              className="w-full px-4 py-2 bg-black border border-green-600 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            />
+          ))}
+        </div>
 
-        {/* Size Input */}
-        <div>
-          <label className="block font-medium text-green-400 mb-1">Sizes</label>
-          <div className="flex items-center gap-3">
+        {/* Sizes Section */}
+        <div className="space-y-4">
+          <label className="text-green-400 font-semibold">Sizes</label>
+          <div className="flex gap-4 items-center">
             <input
               type="number"
               value={sizeInput}
               onChange={(e) => setSizeInput(e.target.value)}
-              placeholder="Add size (e.g., 40)"
-              className="placeholder:italic bg-black text-white border border-green-600 px-3 py-1 rounded focus:ring-1 focus:ring-green-400"
+              placeholder="e.g. 40"
+              className="px-3 py-2 bg-black border border-green-600 rounded placeholder-gray-400"
             />
-            <div class="relative group overflow-hidden bg-white/20 p-0.5 h-9 w-20 rounded-md active:scale-100 hover:scale-105 transition-all duration-300">
-              <button
-                type="button"
-                onClick={handleAddSize}
-                class="text-white text-sm bg-gradient-to-t from-black/50 to-black h-full w-full rounded group-hover:bg-green-500"
-              >
-                Add Size
-              </button>
-              <div class="absolute -bottom-12 group-hover:-bottom-10 transition-all duration-200 left-1/2 -z-10 -translate-x-1/2 blur size-14 rounded-full bg-white"></div>
-            </div>
+            <button
+              type="button"
+              onClick={handleAddSize}
+              className="bg-green-600 hover:bg-green-700 px-4 py-2 text-white rounded-md transition"
+            >
+              Add Size
+            </button>
           </div>
 
-          {/* Sizes with stock inputs */}
-          <div className="mt-4 space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {form.sizes.map((size) => (
-              <div key={size} className="flex items-center gap-4">
-                <span className="font-small text-green-700">Size {size}</span>
+              <div key={size} className="flex items-center gap-3">
+                <span className="text-green-300 font-medium">Size {size}</span>
                 <input
                   type="number"
                   min={0}
                   value={form.stock[size] || ""}
                   onChange={(e) => handleStockChange(size, e.target.value)}
                   placeholder="Stock"
-                  className="bg-black text-white border border-green-600 px-3 py-1 rounded w-24"
+                  className="px-3 py-1 w-24 bg-black border border-green-600 rounded placeholder-gray-400"
                 />
               </div>
             ))}
           </div>
         </div>
 
-        {/* Image upload */}
-        <div>
-          <label className="block font-medium text-green-600 mb-1">Image</label>
+        {/* Image Upload */}
+        <div className="space-y-2">
+          <label className="text-green-400 font-semibold">Image</label>
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
             required
-            className="w-full bg-black text-white file:bg-green-800 file:text-white file:rounded file:px-4 file:py-1 file:mr-4 border border-green-800 rounded"
+            className="block w-full text-sm text-white bg-black border border-green-800 rounded file:px-4 file:py-1 file:mr-4 file:bg-green-800 file:text-white file:rounded"
           />
         </div>
 
-        {/* Submit */}
-        <div class="button-bg flex justify-center items-center rounded-full p-0.5 hover:scale-105 transition duration-300 active:scale-100">
+        {/* Submit Button */}
+        <div className="flex justify-center">
           <button
             type="submit"
-            class="Outfit px-8 text-sm py-2.5 text-white rounded-full font-medium bg-gray-800"
+            className="px-8 py-2.5 text-white bg-green-600 hover:bg-green-700 rounded-full font-medium transition"
           >
             Submit
           </button>

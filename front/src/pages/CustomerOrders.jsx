@@ -29,51 +29,62 @@ export default function CustomerOrders() {
   }
 
   return (
-    <div className="relative min-h-screen px-6 py-16 bg-black text-white overflow-hidden">
-      {/* Vibrant blurred circles */}
-      <div className="absolute top-[-100px] left-[-100px] w-[300px] h-[300px] bg-green-500 rounded-full opacity-20 blur-3xl"></div>
-      <div className="absolute top-0 right-[-80px] w-[200px] h-[200px] bg-pink-500 rounded-full opacity-30 blur-2xl"></div>
-      <div className="absolute bottom-[-120px] left-[20%] w-[250px] h-[250px] bg-blue-500 rounded-full opacity-20 blur-3xl"></div>
+    <div className="min-h-screen bg-[#0f0f0f] text-white px-4 sm:px-10 py-16 overflow-x-auto">
+      <h1 className="text-4xl font-extrabold mb-10 text-center text-transparent bg-clip-text bg-gradient-to-r from-black via-green-700 to-green-400">
+        Customer Orders
+      </h1>
 
-      <div className="relative z-10">
-        <h1 className="text-4xl font-extrabold mb-10 text-center text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-blue-400 to-pink-400">
-          Customer Orders
-        </h1>
-
-        {orders.length === 0 ? (
-          <p className="text-center text-red-400 text-lg">No orders found.</p>
-        ) : (
-          <div className="grid gap-10 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-            {orders.map((order) => (
-              <div
-                key={order._id}
-                className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl shadow-lg p-6 space-y-5 transition-transform hover:scale-[1.02]"
-              >
-                {/* Customer Info */}
-                <div>
-                  <h2 className="text-pink-400 font-semibold text-lg mb-1">👤 Customer</h2>
-                  <p><span className="text-gray-400">Name:</span> {order.customerInfo?.fullName || "N/A"}</p>
-                  <p><span className="text-gray-400">Email:</span> {order.customerInfo?.email || "N/A"}</p>
-                  <p><span className="text-gray-400">Phone:</span> {order.customerInfo?.phoneNumber || "N/A"}</p>
-                  <p><span className="text-gray-400">Address:</span> {order.customerInfo?.address || "N/A"}</p>
-                </div>
-
-                {/* Products */}
-                <div>
-                  <h2 className="text-blue-400 font-semibold text-lg mb-1">🛒 Products</h2>
-                  <ul className="list-disc list-inside space-y-1 text-sm">
-                    {order.products.map((item, idx) => (
-                      <li key={idx}>
-                        {item.productId?.name || "Product"} — {item.quantity}x, Size: {item.size || "N/A"} <span className="text-green-400">({item.priceAtPurchase} MAD)</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Status + Total */}
-                <div className="border-t border-white/10 pt-4 text-sm">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium">Status:</span>
+      {orders.length === 0 ? (
+        <p className="text-center text-red-400 text-lg">No orders found.</p>
+      ) : (
+        <div className="overflow-auto rounded-xl shadow-md border border-white/10 backdrop-blur-lg">
+          <table className="min-w-full text-sm text-left border-separate border-spacing-y-2">
+            <thead className="bg-white/5 text-gray-300">
+              <tr>
+                <th className="px-4 py-3">Customer</th>
+                <th className="px-4 py-3">Email</th>
+                <th className="px-4 py-3">Phone</th>
+                <th className="px-4 py-3">Address</th>
+                <th className="px-4 py-3">Products</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Total (MAD)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order) => (
+                <tr
+                  key={order._id}
+                  className="bg-white/5 text-white hover:bg-white/10 transition duration-200"
+                >
+                  <td className="px-4 py-3 font-medium">
+                    {order.customerInfo?.fullName || "N/A"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {order.customerInfo?.email || "N/A"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {order.customerInfo?.phoneNumber || "N/A"}
+                  </td>
+                  <td className="px-4 py-3">
+                    {order.customerInfo?.address || "N/A"}
+                  </td>
+                  <td className="px-4 py-3 text-xs">
+                    <ul className="space-y-1">
+                      {order.products.map((item, idx) => (
+                        <li key={idx}>
+                          <span className="text-blue-300">
+                            {item.productId?.name || "Product"}
+                          </span>{" "}
+                          — {item.quantity}x, {item.size || "N/A"} —{" "}
+                          <span className="text-green-400">
+                            {item.priceAtPurchase} MAD
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="px-4 py-3">
                     <span
                       className={`px-2 py-1 rounded-md text-xs font-semibold ${
                         order.status === "pending"
@@ -85,21 +96,19 @@ export default function CustomerOrders() {
                     >
                       {order.status}
                     </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Date:</span>
-                    <span>{new Date(order.createdAt).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex justify-between mt-2">
-                    <span className="font-semibold">Total:</span>
-                    <span className="text-green-300 font-bold">{order.totalAmount} MAD</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    {new Date(order.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-4 py-3 font-bold text-green-400">
+                    {order.totalAmount} MAD
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

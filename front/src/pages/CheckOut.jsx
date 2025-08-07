@@ -28,20 +28,14 @@ export default function Checkout() {
   };
 
   const handlePlaceOrder = async () => {
-    if (cart.length === 0) {
-      toast.error("Your cart is empty.");
-      return;
-    }
-
+    if (cart.length === 0) return toast.error("Cart is empty.");
     if (
       !customer.name ||
       !customer.email ||
       !customer.phone ||
       !customer.address
-    ) {
-      toast.error("Please fill all customer information fields.");
-      return;
-    }
+    )
+      return toast.error("Please fill all fields.");
 
     setIsPlacingOrder(true);
     try {
@@ -63,7 +57,6 @@ export default function Checkout() {
       setCustomer({ name: "", email: "", phone: "", address: "" });
     } catch (err) {
       toast.error("Order failed");
-      console.error(err.response?.data || err.message);
     } finally {
       setIsPlacingOrder(false);
     }
@@ -71,116 +64,94 @@ export default function Checkout() {
 
   return (
     <div
-      className="min-h-screen bg-black flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 font-outfit"
+      className="min-h-screen flex items-center justify-center px-4 py-10 bg-black text-white"
       style={{
-        backgroundImage: `radial-gradient(circle at 1px 1px, #222 1px, transparent 1px), 
-                          radial-gradient(circle at 20px 20px, #222 1px, transparent 1px)`,
-        backgroundSize: "40px 40px",
+        backgroundImage:
+          "repeating-linear-gradient(45deg, #111 0, #111 2px, #000 2px, #000 20px)",
       }}
     >
-      <div className="max-w-4xl w-full bg-gray-900 rounded-2xl shadow-lg p-10 space-y-10 border border-green-700">
-        {/* Heading */}
-        <h2 className="text-3xl font-extrabold text-green-400 text-center">
-          Checkout
-        </h2>
+      <div className="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-10 bg-[#0f0f0f] border-green-700 rounded-2xl shadow-xl p-8 font-outfit">
+        {/* Cart Summary */}
+        <div className="bg-[#141414] border border-green-800 rounded-xl p-6 shadow-inner max-h-[600px] overflow-y-auto">
+          <h2 className="text-2xl font-bold text-green-400 mb-4">Your Order</h2>
 
-        {/* Grid container */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {/* Customer Info Form */}
-          <form className="space-y-6">
-            <InputField
-              label="Full Name"
-              name="name"
-              value={customer.name}
-              onChange={handleInputChange}
-              placeholder="Your full name"
-              type="text"
-            />
-            <InputField
-              label="Email Address"
-              name="email"
-              value={customer.email}
-              onChange={handleInputChange}
-              placeholder="you@example.com"
-              type="email"
-            />
-            <InputField
-              label="Phone Number"
-              name="phone"
-              value={customer.phone}
-              onChange={handleInputChange}
-              placeholder="+212 600 000 000"
-              type="tel"
-            />
-            <div>
-              <label className="block mb-1 text-green-400 font-semibold">
-                Address
-              </label>
-              <textarea
-                name="address"
-                value={customer.address}
-                onChange={handleInputChange}
-                rows={4}
-                placeholder="Street, City, Zip Code"
-                className="w-full rounded-md border border-green-600 bg-black px-4 py-3 text-green-300 placeholder-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
-              />
+          {cart.length === 0 ? (
+            <p className="text-green-500">No items in cart.</p>
+          ) : (
+            <ul className="space-y-4">
+              {cart.map(({ product, quantity, size }) => {
+                const discounted =
+                  product.discount && product.discount > 0
+                    ? (product.price * (100 - product.discount)) / 100
+                    : product.price;
+                return (
+                  <li
+                    key={product._id + size}
+                    className="flex justify-between items-center"
+                  >
+                    <div>
+                      <p className="font-semibold text-green-300">
+                        {product.name}
+                      </p>
+                      <p className="text-sm text-green-500">
+                        Qty: {quantity} | Size: {size}
+                      </p>
+                    </div>
+                    <p className="text-green-400 font-medium">
+                      {(discounted * quantity).toFixed(2)} dh
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+
+          {cart.length > 0 && (
+            <div className="border-t border-green-700 mt-6 pt-4 flex justify-between font-bold text-green-400 text-lg">
+              <span>Total:</span>
+              <span>{totalPrice.toFixed(2)} dh</span>
             </div>
-          </form>
-
-          {/* Cart Summary */}
-          <div className="bg-black rounded-lg p-6 shadow-inner border border-green-700 overflow-y-auto max-h-[400px]">
-            <h3 className="text-xl font-semibold mb-6 border-b border-green-700 pb-2 text-green-400">
-              Your Cart
-            </h3>
-
-            {cart.length === 0 ? (
-              <p className="text-green-600 text-center py-20">
-                Your cart is empty.
-              </p>
-            ) : (
-              <ul className="divide-y divide-green-700 max-h-[350px] overflow-y-auto">
-                {cart.map(({ product, quantity, size }) => {
-                  const discountedPrice =
-                    product.discount && product.discount > 0
-                      ? (product.price * (100 - product.discount)) / 100
-                      : product.price;
-
-                  return (
-                    <li
-                      key={product._id + size}
-                      className="flex justify-between items-center py-3"
-                    >
-                      <div>
-                        <p className="font-medium text-green-300">{product.name}</p>
-                        <p className="text-sm text-green-500">
-                          Qty: {quantity} | Size: {size}
-                        </p>
-                      </div>
-                      <div className="text-green-400 font-semibold">
-                        {(discountedPrice * quantity).toFixed(2)} dh
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-
-            {/* Total */}
-            {cart.length > 0 && (
-              <div className="mt-6 border-t border-green-700 pt-4 flex justify-between text-lg font-semibold text-green-400">
-                <span>Total:</span>
-                <span>{totalPrice.toFixed(2)} dh</span>
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
-        {/* Place order button */}
-        <div className="text-center">
+        {/* Customer Info */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-green-400">Shipping Info</h2>
+
+          <FloatingInput
+            label="Full Name"
+            name="name"
+            value={customer.name}
+            onChange={handleInputChange}
+            type="text"
+          />
+          <FloatingInput
+            label="Email"
+            name="email"
+            value={customer.email}
+            onChange={handleInputChange}
+            type="email"
+          />
+          <FloatingInput
+            label="Phone"
+            name="phone"
+            value={customer.phone}
+            onChange={handleInputChange}
+            type="tel"
+          />
+          <FloatingTextarea
+            label="Address"
+            name="address"
+            value={customer.address}
+            onChange={handleInputChange}
+          />
+
           <button
             onClick={handlePlaceOrder}
             disabled={isPlacingOrder}
-            className="inline-block bg-green-700 hover:bg-green-800 text-white font-semibold py-3 px-10 rounded-full shadow-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 rounded-xl font-semibold text-lg transition-all duration-300
+             bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500
+             text-white shadow-md hover:shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isPlacingOrder ? "Placing Order..." : "Place Order"}
           </button>
@@ -190,18 +161,40 @@ export default function Checkout() {
   );
 }
 
-function InputField({ label, name, value, onChange, placeholder, type = "text" }) {
+// Floating Input Component
+function FloatingInput({ label, name, value, onChange, type }) {
   return (
-    <div>
-      <label className="block mb-1 text-green-400 font-semibold">{label}</label>
+    <div className="relative">
       <input
         type={type}
         name={name}
         value={value}
         onChange={onChange}
-        placeholder={placeholder}
-        className="w-full rounded-md border border-green-600 bg-black px-4 py-3 text-green-300 placeholder-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+        className="w-full bg-black border border-green-600 text-green-200 rounded-md px-4 pt-6 pb-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+        placeholder=" "
       />
+      <label className="absolute left-4 top-2 text-sm text-green-500 pointer-events-none transition-all">
+        {label}
+      </label>
+    </div>
+  );
+}
+
+// Floating Textarea
+function FloatingTextarea({ label, name, value, onChange }) {
+  return (
+    <div className="relative">
+      <textarea
+        name={name}
+        value={value}
+        onChange={onChange}
+        rows={4}
+        className="w-full bg-black border border-green-600 text-green-200 rounded-md px-4 pt-6 pb-2 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+        placeholder=" "
+      />
+      <label className="absolute left-4 top-2 text-sm text-green-500 pointer-events-none transition-all">
+        {label}
+      </label>
     </div>
   );
 }

@@ -77,11 +77,10 @@ export default function AdminProductDashboard() {
   };
 
   return (
-    <div className="relative min-h-screen bg-black text-white py-16 px-6 overflow-x-auto">
-
+    <div className="relative min-h-screen text-white py-16 px-6 overflow-x-auto">
       <div className="relative z-10">
-        <h2 className="text-3xl font-bold mb-8 text-center">
-          Admin Product Dashboard
+        <h2 className="text-3xl font-extrabold mb-10 text-center text-transparent bg-clip-text bg-gradient-to-r from-black via-green-700 to-green-400">
+          Admin Dashboard
         </h2>
         {editProduct && (
           <div className="bg-[#1c1c1c] p-6 rounded-lg mb-8">
@@ -191,17 +190,49 @@ export default function AdminProductDashboard() {
                   )}
                 </td>
                 <td className="p-4 text-center">
-                  <div className="flex justify-center gap-2">
+                  <div className="flex justify-center gap-3">
                     <button
                       onClick={() => handleEdit(product)}
-                      className="bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-300 text-white text-sm font-medium px-4 py-2 rounded-md shadow transition duration-200"
+                      className="inline-flex items-center gap-2 bg-transparent border border-green-500 text-green-500 px-3 py-1.5 rounded-md text-sm font-semibold hover:bg-green-500 hover:text-white transition"
+                      aria-label={`Edit ${product.name}`}
                     >
+                      {/* Optional icon */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M11 5h6m-6 4h6m-6 4h6m-6 4h6M6 6v12"
+                        />
+                      </svg>
                       Edit
                     </button>
                     <button
                       onClick={() => handleDelete(product._id)}
-                      className="bg-red-600 hover:bg-red-700 active:bg-red-800 focus:outline-none focus:ring-2 focus:ring-red-300 text-white text-sm font-medium px-4 py-2 rounded-md shadow transition duration-200"
+                      className="inline-flex items-center gap-2 bg-transparent border border-red-500 text-red-500 px-3 py-1.5 rounded-md text-sm font-semibold hover:bg-red-500 hover:text-white transition"
+                      aria-label={`Delete ${product.name}`}
                     >
+                      {/* Optional icon */}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
                       Delete
                     </button>
                   </div>

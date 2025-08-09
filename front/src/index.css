@@ -20,4 +20,15 @@ html, body {
   font-family: 'Outfit', sans-serif;
 }
 
+/* Hide number input arrows in Chrome, Safari, Edge, Opera */
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide number input arrows in Firefox */
+.no-spinner[type="number"] {
+  -moz-appearance: textfield;
+}
 

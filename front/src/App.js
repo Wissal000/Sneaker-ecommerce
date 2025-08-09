@@ -10,6 +10,7 @@ import CustomerDashboard from "./pages/CustomerDashboard";
 import CartPage from "./pages/CartPage";
 import CheckOut from "./pages/CheckOut";
 import AdminView from "./pages/AdminView";
+//import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,14 @@ function App() {
         {!shouldHideHeader && <Header />}
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* <Route
+            path="/customerdashboard"
+            element={
+              <PrivateRoute>
+                <CustomerDashboard />
+              </PrivateRoute>
+            }
+          /> */}
           <Route path="/customerdashboard" element={<CustomerDashboard />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckOut />} />

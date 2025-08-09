@@ -85,7 +85,7 @@ export default function AddSneaker() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen text-white flex items-center justify-center px-4 py-12">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-3xl bg-black/40 border border-green-500 p-10 rounded-xl backdrop-blur-md shadow-2xl space-y-8"
@@ -132,7 +132,7 @@ export default function AddSneaker() {
             <button
               type="button"
               onClick={handleAddSize}
-              className="bg-green-600 hover:bg-green-700 px-4 py-2 text-white rounded-md transition"
+              className="bg-green-800 hover:bg-green-900 px-4 py-2 text-white rounded-md transition"
             >
               Add Size
             </button>
@@ -171,7 +171,7 @@ export default function AddSneaker() {
         <div className="flex justify-center">
           <button
             type="submit"
-            className="px-8 py-2.5 text-white bg-green-600 hover:bg-green-700 rounded-full font-medium transition"
+            className="px-8 py-2.5 text-white bg-green-900 hover:bg-green-800 rounded-full font-medium transition"
           >
             Submit
           </button>

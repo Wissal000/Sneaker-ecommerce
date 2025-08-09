@@ -7,6 +7,10 @@ import { toast } from "react-toastify";
 export default function ProductList() {
   const [products, setProducts] = useState([]);
 
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -57,18 +61,83 @@ export default function ProductList() {
 
       {/* Main content */}
       <div className="relative z-10 max-w-7xl mx-auto text-center">
-        <h2 className="font-outfit text-4xl font-bold mb-12">Explore Our Products</h2>
+        <h2 className="font-outfit text-4xl font-bold mb-12">
+          Explore Our Products
+        </h2>
+
+        {/* Modern Filters - Dark Green Mode */}
+        <div className="flex items-center gap-4 justify-end mb-12">
+          {/* Brand Filter */}
+          <select
+            value={selectedBrand}
+            onChange={(e) => setSelectedBrand(e.target.value)}
+            className="px-4 py-2 rounded-full bg-green-900/20 backdrop-blur-md border border-green-500/20 text-green-200 text-sm shadow-sm hover:bg-green-800/30 transition"
+          >
+            <option value="" className="bg-black text-green-200">
+              All Brands
+            </option>
+            {[...new Set(products.map((p) => p.brand))].map((brand) => (
+              <option
+                key={brand}
+                value={brand}
+                className="bg-black text-green-200"
+              >
+                {brand}
+              </option>
+            ))}
+          </select>
+
+          {/* Category Filter */}
+          <select
+            value={selectedCategory}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setSelectedBrand("");
+            }}
+            className="px-4 py-2 rounded-full bg-green-900/20 backdrop-blur-md border border-green-500/20 text-green-200 text-sm shadow-sm hover:bg-green-800/30 transition"
+          >
+            <option value="" className="bg-black text-green-200">
+              Category
+            </option>
+            <option value="Homme" className="bg-black text-green-200">
+              Homme
+            </option>
+            <option value="Women" className="bg-black text-green-200">
+              Femme
+            </option>
+            <option value="Kids" className="bg-black text-green-200">
+              Enfant
+            </option>
+          </select>
+
+          {/* Price Filter */}
+          <input
+            type="number"
+            placeholder="Max Price"
+            value={maxPrice}
+            onChange={(e) => setMaxPrice(e.target.value)}
+            className="px-4 py-2 rounded-full bg-green-900/20 backdrop-blur-md border border-green-500/20 text-green-200 text-sm shadow-sm placeholder-green-400 hover:bg-green-800/30 transition w-28 no-spinner"
+          />
+        </div>
 
         {/* Product cards grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4 md:px-10">
-          {products.map((product) => (
-            <div
-              key={product._id}
-              className="bg-[#0f0f0f] border border-[#1f1f1f] rounded-xl shadow-md transition-transform duration-200 hover:-translate-y-2 hover:shadow-lg"
-            >
-              <ProductCardGrid product={product} />
-            </div>
-          ))}
+          {products
+            .filter((p) => !selectedBrand || p.brand === selectedBrand)
+            .filter(
+              (p) =>
+                !selectedCategory ||
+                p.category?.toLowerCase() === selectedCategory.toLowerCase()
+            )
+            .filter((p) => !maxPrice || p.price <= parseFloat(maxPrice))
+            .map((product) => (
+              <div
+                key={product._id}
+                className="bg-[#0f0f0f] border border-[#1f1f1f] rounded-xl shadow-md transition-transform duration-200 hover:-translate-y-2 hover:shadow-lg"
+              >
+                <ProductCardGrid product={product} />
+              </div>
+            ))}
         </div>
       </div>
     </div>
@@ -95,7 +164,7 @@ function ProductCardGrid({ product }) {
   };
 
   return (
-    <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col justify-between text-white">
+    <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-4 shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full text-white">
       {/* Product Image */}
       <div className="w-full h-48 rounded-xl overflow-hidden border-[#333] mb-3 relative group">
         <img
@@ -120,7 +189,7 @@ function ProductCardGrid({ product }) {
         )}
 
         {product.sizes?.length > 0 && (
-          <div className="mt-3">
+          <div className="mt-3 min-h-[90px]">
             <label className="block text-sm text-gray-400 mb-2">
               Choose Size
             </label>
@@ -131,11 +200,11 @@ function ProductCardGrid({ product }) {
                   type="button"
                   onClick={() => setSelectedSize(size)}
                   className={`px-3 py-1.5 text-sm rounded-full border transition-all
-            ${
-              selectedSize === size
-                ? "bg-green-600 text-white border-green-600"
-                : "bg-[#2a2a2a] text-gray-300 border-[#444] hover:border-green-500 hover:text-white"
-            }`}
+        ${
+          selectedSize === size
+            ? "bg-green-600 text-white border-green-600"
+            : "bg-[#2a2a2a] text-gray-300 border-[#444] hover:border-green-500 hover:text-white"
+        }`}
                 >
                   {size}
                 </button>

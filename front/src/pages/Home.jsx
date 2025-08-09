@@ -52,7 +52,7 @@ export default function Home() {
       <div className="absolute w-[600px] h-[600px] bg-green-600/10 rounded-full blur-2xl bottom-[-150px] right-[-150px] animate-ping z-0" />
 
       {/* Auth Card */}
-      <div className="relative z-10 w-[90%] max-w-4xl bg-white/5 backdrop-blur-2xl border border-green-900/40 rounded-3xl shadow-2xl flex overflow-hidden">
+      <div className="relative z-10 w-[70%] max-w-4xl bg-white/5 backdrop-blur-2xl border border-green-900/40 rounded-3xl shadow-2xl flex overflow-hidden">
         {/* Left panel */}
         <div className="w-1/2 bg-gradient-to-b from-green-800 to-green-950 text-white flex flex-col justify-center items-center p-12 space-y-6">
           <h1 className="text-6xl font-black tracking-widest">SNEX</h1>

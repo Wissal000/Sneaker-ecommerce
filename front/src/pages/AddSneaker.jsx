@@ -77,7 +77,7 @@ export default function AddSneaker() {
         stock: {},
       });
       setImage(null);
-      navigate("/admindashboard");
+      navigate("/AdminView");
     } catch (err) {
       toast.error("❌ Upload failed");
       console.error(err.response?.data || err.message);

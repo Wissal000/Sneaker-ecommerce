@@ -90,14 +90,14 @@ export default function Checkout() {
                     className="flex justify-between items-center"
                   >
                     <div>
-                      <p className="font-semibold text-green-300">
+                      <p className="font-semibold text-gray-300">
                         {product.name}
                       </p>
-                      <p className="text-sm text-green-500">
+                      <p className="text-sm text-gray-500">
                         Qty: {quantity} | Size: {size}
                       </p>
                     </div>
-                    <p className="text-green-400 font-medium">
+                    <p className="text-gray-400 font-medium">
                       {(discounted * quantity).toFixed(2)} dh
                     </p>
                   </li>
@@ -189,10 +189,10 @@ function FloatingTextarea({ label, name, value, onChange }) {
         value={value}
         onChange={onChange}
         rows={4}
-        className="w-full bg-black border border-green-600 text-green-200 rounded-md px-4 pt-6 pb-2 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
+        className="w-full bg-black border border-green-600 text-gray-200 rounded-md px-4 pt-6 pb-2 resize-none focus:outline-none focus:ring-2 focus:ring-green-500"
         placeholder=" "
       />
-      <label className="absolute left-4 top-2 text-sm text-green-500 pointer-events-none transition-all">
+      <label className="absolute left-4 top-2 text-sm text-gray-500 pointer-events-none transition-all">
         {label}
       </label>
     </div>

@@ -5,28 +5,49 @@ import Product from "../models/product.model.js";
 const router = express.Router();
 
 router.post("/", upload.single("image"), async (req, res) => {
-  const { name, brand, price, discount, description, category, color } =
-    req.body;
-  const sizes = JSON.parse(req.body.sizes);
-  const stock = JSON.parse(req.body.stock);
-  const imageUrl = req.file.path; // or wherever multer stores it
+  try {
+    const { name, brand, price, discount, description, category, color } =
+      req.body;
 
-  const newProduct = new Product({
-    name,
-    brand,
-    price,
-    discount,
-    imageUrl,
-    description,
-    category,
-    color,
-    sizes,
-    stock,
-  });
+    let sizes = [];
+    let stock = [];
 
-  await newProduct.save();
-  res.status(201).json({ message: "Product saved successfully!" });
+    // Safe parse sizes and stock
+    try {
+      sizes = JSON.parse(req.body.sizes || "[]");
+      stock = JSON.parse(req.body.stock || "[]");
+    } catch (parseError) {
+      return res.status(400).json({ message: "Invalid sizes or stock format" });
+    }
+
+    // Ensure Multer uploaded file
+    if (!req.file) {
+      return res.status(400).json({ message: "Image file is required" });
+    }
+
+    const imageUrl = req.file.path;
+
+    const newProduct = new Product({
+      name,
+      brand,
+      price,
+      discount,
+      imageUrl,
+      description,
+      category,
+      color,
+      sizes,
+      stock,
+    });
+
+    await newProduct.save();
+    res.status(201).json({ message: "Product saved successfully!" });
+  } catch (err) {
+    console.error("Error saving product:", err);
+    res.status(500).json({ message: err.message || "Server error" });
+  }
 });
+
 
 // GET all products
 router.get("/", async (req, res) => {
